@@ -1,0 +1,1 @@
+export default function Header(){return <header className="top"><a href="/" className="brand">PORTAL CE<small>GESTIÓN PRIVADA DE REGISTROS</small></a><span style={{fontSize:12,opacity:.85}}>Sistema de consulta informativa</span></header>}
