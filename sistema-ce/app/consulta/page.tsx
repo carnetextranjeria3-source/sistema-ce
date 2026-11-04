@@ -31,12 +31,16 @@ function Content() {
     })
       .then(async (r) => {
         const d = await r.json();
-        if (!r.ok) throw new Error(d.error || 'No se encontró el registro');
+        if (!r.ok) {
+          throw new Error(d.error || 'No se encontró el registro');
+        }
         setResult(d);
       })
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
   }, [doc, dob]);
+
+  const record = result?.record;
 
   const fmt = (v: string) =>
     v
@@ -48,10 +52,16 @@ function Content() {
         }).toUpperCase()
       : 'NO REGISTRADO';
 
-  const record = result?.record;
-
-  const field = (label: string, value: any) => (
-    <div className="ce-field">
+  const Field = ({
+    label,
+    value,
+    centered = false
+  }: {
+    label: string;
+    value: any;
+    centered?: boolean;
+  }) => (
+    <div className={`ce-field ${centered ? 'ce-centered' : ''}`}>
       <span>{label}</span>
       <strong>{value || 'NO REGISTRADO'}</strong>
     </div>
@@ -65,77 +75,136 @@ function Content() {
         <div className="ce-heading">
           <span>PORTAL CE · CONSULTA PRIVADA</span>
           <h1>Resultado de consulta</h1>
-          <p>Ficha informativa de registro privado</p>
+          <p>Información de registro privado</p>
         </div>
 
         <section className="ce-sheet">
-          {loading && <p>Buscando registro...</p>}
+          {loading && <p className="ce-status">Buscando registro...</p>}
 
           {error && <div className="error">{error}</div>}
 
           {record && (
             <>
               <div className="ce-private-label">
-                FICHA INFORMATIVA · NO ES UN DOCUMENTO OFICIAL
+                FICHA INFORMATIVA DE REGISTRO PRIVADO
               </div>
 
               <div className="ce-assets">
                 <div className="ce-asset">
                   <b>FOTOGRAFÍA</b>
-                  <div className="ce-placeholder">ACCESO RESTRINGIDO</div>
+                  <div className="ce-placeholder">
+                    ARCHIVO PROTEGIDO
+                  </div>
                 </div>
 
                 <div className="ce-asset">
                   <b>FIRMA</b>
-                  <div className="ce-placeholder">ACCESO RESTRINGIDO</div>
+                  <div className="ce-placeholder">
+                    ARCHIVO PROTEGIDO
+                  </div>
                 </div>
 
                 <div className="ce-asset">
                   <b>HUELLA</b>
-                  <div className="ce-placeholder">ACCESO RESTRINGIDO</div>
+                  <div className="ce-placeholder">
+                    ARCHIVO PROTEGIDO
+                  </div>
                 </div>
               </div>
 
-              <h2 className="ce-section-title">DATOS DE LA PERSONA</h2>
+              <div className="ce-divider" />
+
+              <h2 className="ce-section-title">
+                DATOS DE LA PERSONA
+              </h2>
 
               <div className="ce-grid">
-                {field('NOMBRE(S)', record.firstNames)}
-                {field('APELLIDO(S)', record.surnames)}
-                {field('NACIONALIDAD', record.nationality)}
-                {field('FECHA DE NACIMIENTO', fmt(record.birthDate))}
-                {field('SEXO', record.sex)}
-                {field('TIPO DE DOCUMENTO', record.documentType)}
-                {field('NÚMERO DE DOCUMENTO', record.documentNumber)}
+                <Field
+                  label="NOMBRE(S)"
+                  value={record.firstNames}
+                />
+
+                <Field
+                  label="APELLIDO(S)"
+                  value={record.surnames}
+                />
+
+                <Field
+                  label="NACIONALIDAD"
+                  value={record.nationality}
+                />
+
+                <Field
+                  label="FECHA DE NACIMIENTO"
+                  value={fmt(record.birthDate)}
+                />
               </div>
+
+              <div className="ce-sex">
+                <Field
+                  label="SEXO"
+                  value={record.sex}
+                  centered
+                />
+              </div>
+
+              <div className="ce-divider ce-divider-section" />
 
               <h2 className="ce-section-title">
                 DATOS DEL REGISTRO PRIVADO
               </h2>
 
               <div className="ce-grid">
-                {field('CALIDAD O CONDICIÓN REGISTRADA', record.migrationStatus)}
-                {field('NÚMERO DE REFERENCIA', record.certificateNumber)}
-                {field('FECHA DE EMISIÓN', fmt(record.issueDate))}
-                {field('FECHA DE CADUCIDAD', fmt(record.expiryDate))}
-                {field('VENCIMIENTO DE RESIDENCIA', fmt(record.residenceExpiry))}
+                <Field
+                  label="CALIDAD MIGRATORIA"
+                  value={record.migrationStatus}
+                />
+
+                <Field
+                  label="NRO. DE CARNÉ CE"
+                  value={record.certificateNumber}
+                />
+
+                <Field
+                  label="EMISIÓN DEL CARNÉ"
+                  value={fmt(record.issueDate)}
+                />
+
+                <Field
+                  label="CADUCIDAD DEL CARNÉ"
+                  value={fmt(record.expiryDate)}
+                />
+              </div>
+
+              <div className="ce-residence">
+                <Field
+                  label="VENCIMIENTO DE RESIDENCIA"
+                  value={fmt(record.residenceExpiry)}
+                  centered
+                />
               </div>
 
               <div className="ce-notice">
-                Esta ficha presenta información de una base de datos privada.
-                No constituye un carné de extranjería, documento de identidad
-                ni verificación oficial de una autoridad migratoria.
-                Los archivos fotográficos, firmas y datos biométricos
-                permanecen protegidos y no se exponen en consultas públicas.
+                FICHA INFORMATIVA DE UNA BASE DE DATOS PRIVADA.
+                NO CONSTITUYE UN CARNÉ DE EXTRANJERÍA, DOCUMENTO
+                DE IDENTIDAD NI VERIFICACIÓN OFICIAL DE UNA
+                AUTORIDAD MIGRATORIA. Los archivos fotográficos,
+                firmas y datos biométricos permanecen protegidos
+                y no se muestran en consultas públicas.
               </div>
             </>
           )}
 
           {!loading && !error && !record && (
-            <p>Realiza una consulta para visualizar la información.</p>
+            <p className="ce-status">
+              Realiza una consulta para visualizar la información.
+            </p>
           )}
 
           <div className="ce-actions">
-            <a href="/" className="btn secondary">NUEVA CONSULTA</a>
+            <a href="/" className="btn secondary">
+              NUEVA CONSULTA
+            </a>
           </div>
         </section>
       </main>
@@ -147,7 +216,7 @@ function Content() {
       <style jsx>{`
         .ce-page {
           min-height: 80vh;
-          padding: 32px 16px 55px;
+          padding: 30px 16px 48px;
           background: #edf2f8;
           color: #172d49;
         }
@@ -176,9 +245,10 @@ function Content() {
         }
 
         .ce-sheet {
+          width: 100%;
           max-width: 850px;
           margin: auto;
-          padding: 24px;
+          padding: 25px 26px;
           background: white;
           border: 1px solid #d6e0eb;
           border-radius: 12px;
@@ -187,38 +257,52 @@ function Content() {
 
         .ce-private-label {
           text-align: center;
+          color: #1763a9;
           font-size: 10px;
           font-weight: 800;
-          color: #1763a9;
-          letter-spacing: 1px;
+          letter-spacing: 1.2px;
           margin-bottom: 20px;
         }
 
         .ce-assets {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 15px;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 18px;
           padding-bottom: 20px;
-          border-bottom: 2px solid #b9c8d8;
         }
 
         .ce-asset {
+          min-width: 0;
           text-align: center;
+          font-size: 12px;
+        }
+
+        .ce-asset b {
+          display: block;
+          margin-bottom: 9px;
+          color: #26364a;
           font-size: 12px;
         }
 
         .ce-placeholder {
           min-height: 125px;
-          margin-top: 8px;
           display: flex;
-          justify-content: center;
           align-items: center;
-          padding: 8px;
+          justify-content: center;
+          padding: 10px;
           background: #f0f3f7;
           border: 1px solid #d5deea;
           color: #66778b;
           font-size: 10px;
           font-weight: 700;
+          text-align: center;
+        }
+
+        .ce-divider {
+          width: 100%;
+          height: 2px;
+          background: #b9c8d8;
+          margin: 0 0 20px;
         }
 
         .ce-section-title {
@@ -226,53 +310,92 @@ function Content() {
           text-align: center;
           font-size: 19px;
           font-weight: 800;
-          margin: 22px 0 15px;
+          margin: 20px 0 18px;
         }
 
         .ce-grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 12px;
+          column-gap: 26px;
+          row-gap: 17px;
+          align-items: start;
         }
 
         .ce-field {
           min-width: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 7px;
         }
 
         .ce-field span {
           display: block;
-          margin: 0 0 5px 7px;
+          padding-left: 3px;
           color: #52647a;
-          font-size: 11px;
-          font-weight: 600;
+          font-size: 12px;
+          font-weight: 700;
+          line-height: 1.5;
         }
 
         .ce-field strong {
           display: flex;
           align-items: center;
-          min-height: 43px;
-          padding: 9px 12px;
+          min-height: 48px;
+          width: 100%;
+          padding: 10px 14px;
           border: 1px solid #d5dce5;
-          border-radius: 5px;
+          border-radius: 6px;
           background: #edf0f4;
           color: #26364a;
-          font-size: 14px;
+          font-size: 15px;
           font-weight: 700;
+          line-height: 1.45;
           overflow-wrap: anywhere;
         }
 
+        .ce-centered {
+          width: min(420px, 100%);
+          margin: 0 auto;
+          text-align: center;
+        }
+
+        .ce-centered strong {
+          justify-content: center;
+          text-align: center;
+        }
+
+        .ce-sex {
+          margin-top: 17px;
+        }
+
+        .ce-divider-section {
+          margin-top: 20px;
+          margin-bottom: 20px;
+        }
+
+        .ce-residence {
+          margin-top: 17px;
+        }
+
         .ce-notice {
-          margin-top: 22px;
-          padding: 13px;
+          margin-top: 23px;
+          padding: 14px;
           border-radius: 6px;
           background: #fff6df;
           color: #75551b;
           font-size: 11px;
-          line-height: 1.6;
+          line-height: 1.7;
+          text-align: left;
         }
 
         .ce-actions {
-          margin-top: 20px;
+          margin-top: 18px;
+        }
+
+        .ce-status {
+          color: #52647a;
+          text-align: center;
+          padding: 20px;
         }
 
         .ce-footer {
@@ -285,8 +408,12 @@ function Content() {
         }
 
         @media (max-width: 600px) {
+          .ce-page {
+            padding: 22px 10px 35px;
+          }
+
           .ce-sheet {
-            padding: 15px;
+            padding: 17px 13px;
           }
 
           .ce-assets {
@@ -295,15 +422,37 @@ function Content() {
 
           .ce-placeholder {
             min-height: 90px;
+            padding: 5px;
             font-size: 8px;
           }
 
           .ce-grid {
-            grid-template-columns: 1fr;
+            column-gap: 12px;
+            row-gap: 14px;
+          }
+
+          .ce-field strong {
+            min-height: 44px;
+            padding: 9px;
+            font-size: 13px;
+          }
+
+          .ce-field span {
+            font-size: 10px;
           }
 
           .ce-section-title {
             font-size: 16px;
+          }
+        }
+
+        @media (max-width: 380px) {
+          .ce-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .ce-placeholder {
+            min-height: 75px;
           }
         }
       `}</style>
