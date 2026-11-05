@@ -1,3 +1,4 @@
+
 export default function Header() {
   return (
     <header
@@ -5,12 +6,12 @@ export default function Header() {
         background: '#205b98',
         color: '#fff',
         minHeight: '76px',
-        padding: '12px 5%',
+        padding: '10px 5%',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         gap: '12px',
-        borderBottom: '4px solid #dce8f2',
+        borderBottom: '3px solid #dce8f2',
       }}
     >
       <a
@@ -18,26 +19,20 @@ export default function Header() {
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '12px',
+          gap: '14px',
           color: '#fff',
           textDecoration: 'none',
         }}
       >
-        <span
+        <img
+          src="/images/portal-ce-logo.png"
+          alt="Logo Portal CE"
           style={{
-            width: '43px',
-            height: '43px',
-            border: '2px solid #fff',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '17px',
-            fontWeight: 900,
+            width: '52px',
+            height: '52px',
+            objectFit: 'contain',
           }}
-        >
-          CE
-        </span>
+        />
 
         <span>
           <strong style={{ display: 'block', fontSize: '21px' }}>
