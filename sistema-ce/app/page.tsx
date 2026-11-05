@@ -10,7 +10,7 @@ export default function Home() {
         <div className="hero">
           <div className="eyebrow">PORTAL DE CONSULTA PRIVADA</div>
 
-          <h1>Consulta de información</h1>
+          <h1>Consultas en Línea</h1>
 
           <p>
             Acceda a su ficha informativa ingresando los datos de identificación solicitados. 
