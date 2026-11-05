@@ -82,21 +82,39 @@ function Content() {
               </div>
 
               <div className="ce-assets">
-                <div className="ce-asset">
-                  <b>FOTOGRAFÍA</b>
-                  <div className="ce-placeholder">ARCHIVO PROTEGIDO</div>
-                </div>
+  <div className="ce-asset">
+    <b>FOTOGRAFÍA</b>
+    <div className="ce-image">
+      {record.photoUrl ? (
+        <img src={record.photoUrl} alt="Fotografía del registro" />
+      ) : (
+        <span>FOTOGRAFÍA NO DISPONIBLE</span>
+      )}
+    </div>
+  </div>
 
-                <div className="ce-asset">
-                  <b>FIRMA</b>
-                  <div className="ce-placeholder">ARCHIVO PROTEGIDO</div>
-                </div>
+  <div className="ce-asset">
+    <b>FIRMA</b>
+    <div className="ce-image">
+      {record.signatureUrl ? (
+        <img src={record.signatureUrl} alt="Firma del registro" />
+      ) : (
+        <span>FIRMA NO DISPONIBLE</span>
+      )}
+    </div>
+  </div>
 
-                <div className="ce-asset">
-                  <b>HUELLA</b>
-                  <div className="ce-placeholder">ARCHIVO PROTEGIDO</div>
-                </div>
-              </div>
+  <div className="ce-asset">
+    <b>HUELLA</b>
+    <div className="ce-image">
+      {record.biometricFileUrl ? (
+        <img src={record.biometricFileUrl} alt="Huella del registro" />
+      ) : (
+        <span>HUELLA NO DISPONIBLE</span>
+      )}
+    </div>
+  </div>
+</div>
 
               <h2 className="ce-section-title">DATOS DE LA PERSONA</h2>
 
@@ -218,19 +236,30 @@ function Content() {
           font-size: 12px;
         }
 
-        .ce-placeholder {
-          min-height: 125px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          padding: 8px;
-          background: #f0f3f7;
-          border: 1px solid #d5deea;
-          color: #66778b;
-          font-size: 10px;
-          font-weight: 700;
-          text-align: center;
-        }
+        .ce-image {
+  height: 125px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding: 5px;
+  background: #f0f3f7;
+  border: 1px solid #d5deea;
+  color: #66778b;
+  font-size: 10px;
+  text-align: center;
+}
+
+.ce-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.ce-image span {
+  font-size: 10px;
+  font-weight: 700;
+}
 
         .ce-section-title {
           color: #1763a9;
@@ -340,10 +369,9 @@ function Content() {
             gap: 7px;
           }
 
-          .ce-placeholder {
-            min-height: 90px;
-            font-size: 8px;
-          }
+          .ce-image {
+  height: 90px;
+}
 
           .ce-grid {
             grid-template-columns: 1fr;
