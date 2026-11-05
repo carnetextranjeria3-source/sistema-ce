@@ -231,10 +231,12 @@ select {
 }
 
 .footer {
+  background: #1B569A;
+  color: #ffffff;
   text-align: center;
-  color: #7b8797;
   font-size: 12px;
   padding: 28px;
+  letter-spacing: 1px;
 }
 
 .admin-layout {
