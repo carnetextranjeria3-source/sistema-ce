@@ -19,14 +19,13 @@ export default function Header() {
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '14px',
           color: '#fff',
           textDecoration: 'none',
         }}
       >
         <img
           src="/images/portal-ce-logo.png"
-          alt="Logo Portal CE"
+          alt="Logo"
           style={{
             width: '190px',
             height: 'auto',
@@ -35,7 +34,11 @@ export default function Header() {
             flexShrink: 0,
           }}
         />
+      </a>
 
+      <span style={{ fontSize: '12px', fontWeight: 600 }}>
+        CONSULTA
+      </span>
     </header>
   );
 }
