@@ -36,10 +36,6 @@ export default function Header() {
           }}
         />
 
-
-      <span style={{ fontSize: '12px', fontWeight: 600 }}>
-        Visor Digital
-      </span>
     </header>
   );
 }
