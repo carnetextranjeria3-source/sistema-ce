@@ -141,11 +141,9 @@ function Content() {
               </div>
 
               <div className="ce-notice">
-                Esta ficha contiene información de una base de datos privada.
-                No constituye un documento de identidad ni una verificación
-                oficial de una autoridad migratoria. Las fotografías, firmas
-                y datos biométricos permanecen protegidos y no se muestran
-                en consultas públicas.
+                Esta ficha contiene información registrada en los sistemas institucionales. 
+                Los datos personales y biométricos se encuentran protegidos conforme a la normativa vigente. 
+                Su acceso está sujeto a los controles de seguridad y autorización correspondientes.
               </div>
             </>
           )}
@@ -210,7 +208,7 @@ function Content() {
 }
 
 .ce-sheet::before {
-  content: "PORTAL CE · REGISTRO PRIVADO";
+  content: "MIGRACIONES";
   position: absolute;
   top: 48%;
   left: -12%;
