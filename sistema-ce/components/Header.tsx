@@ -29,7 +29,7 @@ export default function Header() {
           alt="Logo Portal CE"
           style={{
             width: '110px',
-height: '70px',
+height: '100px',
             objectFit: 'contain',
           }}
         />
