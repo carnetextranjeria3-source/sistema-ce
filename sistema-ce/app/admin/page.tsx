@@ -1,6 +1,7 @@
+
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import Header from '@/components/Header';
 
 type PrivateFile = {
@@ -29,11 +30,9 @@ type RecordForm = {
 
 type Row = {
   _id: string;
-  documentType: string;
   documentNumber: string;
   firstNames: string;
   surnames: string;
-  birthDate: string;
   active: boolean;
 };
 
@@ -56,7 +55,7 @@ const blank: RecordForm = {
   active: true,
 };
 
-function dateValue(value: any) {
+function dateValue(value: unknown) {
   return value ? String(value).slice(0, 10) : '';
 }
 
@@ -69,12 +68,19 @@ export default function Admin() {
   const [form, setForm] = useState<RecordForm>({ ...blank });
   const [editing, setEditing] = useState('');
   const [message, setMessage] = useState('');
-  const [messageError, setMessageError] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [busy, setBusy] = useState(false);
   const [uploading, setUploading] = useState('');
 
+  function notify(text: string, error = false) {
+    setMessage(text);
+    setIsError(error);
+  }
+
   async function load() {
-    const response = await fetch('/api/records', { cache: 'no-store' });
+    const response = await fetch('/api/records', {
+      cache: 'no-store',
+    });
 
     if (!response.ok) {
       setAuth(false);
@@ -108,11 +114,6 @@ export default function Admin() {
     checkSession();
   }, []);
 
-  function notify(text: string, error = false) {
-    setMessage(text);
-    setMessageError(error);
-  }
-
   function change<K extends keyof RecordForm>(
     key: K,
     value: RecordForm[K]
@@ -123,7 +124,7 @@ export default function Admin() {
     }));
   }
 
-  async function login(e: React.FormEvent<HTMLFormElement>) {
+  async function login(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setBusy(true);
     notify('');
@@ -138,7 +139,7 @@ export default function Admin() {
       const data = await response.json();
 
       if (!response.ok) {
-        notify(data.error || 'No se pudo iniciar sesión', true);
+        notify(data.error || 'Credenciales incorrectas', true);
         return;
       }
 
@@ -151,7 +152,10 @@ export default function Admin() {
     }
   }
 
-  async function upload(kind: 'photo' | 'signature' | 'biometricFile', file?: File) {
+  async function upload(
+    kind: 'photo' | 'signature' | 'biometricFile',
+    file?: File
+  ) {
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
@@ -168,28 +172,28 @@ export default function Admin() {
     notify('');
 
     try {
-      const data = new FormData();
-      data.append('file', file);
-      data.append('kind', kind);
+      const fd = new FormData();
+      fd.append('file', file);
+      fd.append('kind', kind);
 
       const response = await fetch('/api/upload', {
         method: 'POST',
-        body: data,
+        body: fd,
       });
 
-      const result = await response.json();
+      const data = await response.json();
 
       if (!response.ok) {
-        notify(result.error || 'No se pudo cargar el archivo', true);
+        notify(data.error || 'No se pudo cargar el archivo', true);
         return;
       }
 
       change(kind, {
-        publicId: result.publicId,
-        format: result.format,
+        publicId: data.publicId,
+        format: data.format,
       });
 
-      notify('Archivo cargado. Ahora guarda el registro para asociarlo.');
+      notify('Archivo cargado. Guarda el registro para asociarlo.');
     } catch {
       notify('Error al cargar el archivo', true);
     } finally {
@@ -197,13 +201,19 @@ export default function Admin() {
     }
   }
 
-  async function save(e: React.FormEvent<HTMLFormElement>) {
+  async function save(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
     setBusy(true);
     notify('');
 
     try {
+      const payload = {
+        ...form,
+        // El número del carné sirve también como identificador de consulta.
+        documentNumber: form.documentNumber.trim(),
+        certificateNumber: form.documentNumber.trim(),
+      };
+
       const url = editing
         ? `/api/records/${editing}`
         : '/api/records';
@@ -211,7 +221,7 @@ export default function Admin() {
       const response = await fetch(url, {
         method: editing ? 'PATCH' : 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
@@ -233,9 +243,15 @@ export default function Admin() {
   }
 
   function edit(record: any) {
+    const number =
+      record.documentNumber || record.certificateNumber || '';
+
     setForm({
       ...blank,
       ...record,
+      documentType: record.documentType || 'Carné de extranjería',
+      documentNumber: number,
+      certificateNumber: number,
       birthDate: dateValue(record.birthDate),
       issueDate: dateValue(record.issueDate),
       expiryDate: dateValue(record.expiryDate),
@@ -310,19 +326,17 @@ export default function Admin() {
     return (
       <div className="upload" key={key}>
         <label>{label}</label>
-
         <input
           type="file"
           accept="image/jpeg,image/png,image/webp"
           disabled={uploading !== ''}
           onChange={(e) => upload(key, e.target.files?.[0])}
         />
-
         <small>
           {uploading === key
             ? 'Cargando archivo...'
             : uploaded
-              ? `Archivo asociado: ${form[key].format || 'imagen'}`
+              ? `Archivo cargado: ${form[key].format || 'imagen'}`
               : 'Sin archivo seleccionado'}
         </small>
       </div>
@@ -410,24 +424,11 @@ export default function Admin() {
                   </h2>
 
                   <form onSubmit={save}>
-                    <h3 className="section-title">Datos del documento</h3>
+                    <h3 className="section-title">
+                      Datos de la persona
+                    </h3>
 
                     <div className="grid">
-                      <div className="field">
-                        <label>Tipo de documento</label>
-                        <select
-                          value={form.documentType}
-                          onChange={(e) =>
-                            change('documentType', e.target.value)
-                          }
-                        >
-                          <option>Carné de extranjería</option>
-                          <option>Pasaporte</option>
-                          <option>Otro</option>
-                        </select>
-                      </div>
-
-                      {input('Número de documento', 'documentNumber', 'text', true)}
                       {input('Nombres', 'firstNames', 'text', true)}
                       {input('Apellidos', 'surnames', 'text', true)}
                       {input('Nacionalidad', 'nationality', 'text', true)}
@@ -445,18 +446,28 @@ export default function Admin() {
                           <option>Otro</option>
                         </select>
                       </div>
+
+                      {input(
+                        'Nro. de Carné CE',
+                        'documentNumber',
+                        'text',
+                        true
+                      )}
                     </div>
 
-                    <h3 className="section-title">Información del registro</h3>
+                    <h3 className="section-title">
+                      Datos del carné de extranjería
+                    </h3>
 
                     <div className="grid">
                       {input(
-                        'Calidad o condición registrada',
-                        'migrationStatus'
+                        'Calidad migratoria',
+                        'migrationStatus',
+                        'text',
+                        true
                       )}
-                      {input('Número de referencia', 'certificateNumber')}
-                      {input('Fecha de emisión', 'issueDate', 'date')}
-                      {input('Fecha de caducidad', 'expiryDate', 'date')}
+                      {input('Emisión del carné', 'issueDate', 'date')}
+                      {input('Caducidad del carné', 'expiryDate', 'date')}
                       {input(
                         'Vencimiento de residencia',
                         'residenceExpiry',
@@ -471,7 +482,7 @@ export default function Admin() {
                     <div className="upload-grid">
                       {fileInput('photo', 'Fotografía')}
                       {fileInput('signature', 'Firma')}
-                      {fileInput('biometricFile', 'Archivo biométrico')}
+                      {fileInput('biometricFile', 'Huella / archivo biométrico')}
                     </div>
 
                     <div className="field">
@@ -488,7 +499,7 @@ export default function Admin() {
                     </div>
 
                     {message && (
-                      <div className={messageError ? 'error' : 'success'}>
+                      <div className={isError ? 'error' : 'success'}>
                         {message}
                       </div>
                     )}
@@ -521,13 +532,15 @@ export default function Admin() {
                 </section>
 
                 <section className="card">
-                  <h2 style={{ marginTop: 0 }}>Registros existentes</h2>
+                  <h2 style={{ marginTop: 0 }}>
+                    Registros existentes
+                  </h2>
 
                   <div className="table-wrap">
                     <table>
                       <thead>
                         <tr>
-                          <th>Documento</th>
+                          <th>Nro. de Carné CE</th>
                           <th>Nombre</th>
                           <th>Estado</th>
                           <th>Acciones</th>
