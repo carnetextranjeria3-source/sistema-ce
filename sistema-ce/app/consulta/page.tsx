@@ -197,15 +197,39 @@ function Content() {
         }
 
         .ce-sheet {
-          width: 100%;
-          max-width: 850px;
-          margin: 0 auto;
-          padding: 26px;
-          background: #fff;
-          border: 1px solid #d6e0eb;
-          border-radius: 13px;
-          box-shadow: 0 8px 28px rgba(20, 45, 75, .07);
-        }
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 26px;
+  background: #fff;
+  border: 1px solid #d6e0eb;
+  border-radius: 13px;
+  box-shadow: 0 8px 28px rgba(20, 45, 75, .07);
+}
+
+.ce-sheet::before {
+  content: "PORTAL CE · REGISTRO PRIVADO";
+  position: absolute;
+  top: 48%;
+  left: -12%;
+  width: 125%;
+  text-align: center;
+  transform: rotate(-28deg);
+  color: #174a78;
+  opacity: .07;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: 5px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ce-sheet > * {
+  position: relative;
+  z-index: 1;
+}
 
         .ce-private-label {
           text-align: center;
