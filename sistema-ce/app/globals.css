@@ -331,4 +331,9 @@ th {
   .hero {
     margin: 24px auto;
   }
+
+  .notice {
+  background: #e5f5e8 !important;
+  color: #245c35 !important;
+}
 }
