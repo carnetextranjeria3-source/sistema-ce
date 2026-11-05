@@ -28,9 +28,11 @@ export default function Header() {
           src="/images/portal-ce-logo.png"
           alt="Logo Portal CE"
           style={{
-            width: '230px',
-height: '230px',
+            width: '190px',
+            height: 'auto',
             objectFit: 'contain',
+            display: 'block',
+            flexShrink: 0,
           }}
         />
 
