@@ -13,9 +13,8 @@ export default function Home() {
           <h1>Consulta de información</h1>
 
           <p>
-            Accede a una ficha informativa utilizando los datos de
-            identificación proporcionados. La información corresponde
-            exclusivamente a registros administrados por este portal.
+            Acceda a su ficha informativa ingresando los datos de identificación solicitados. 
+            Consulte la información registrada en los sistemas institucionales de Migraciones.
           </p>
         </div>
 
@@ -57,9 +56,8 @@ export default function Home() {
           </form>
 
           <div className="notice">
-            Aviso: este portal es una herramienta privada de consulta.
-            No pertenece a Migraciones ni emite, renueva o valida
-            documentos oficiales.
+            AVISO INSTITUCIONAL: Plataforma oficial de consulta de información migratoria. 
+            Servicio destinado a facilitar el acceso a los servicios y procedimientos de Migraciones.
           </div>
         </section>
 
@@ -93,9 +91,9 @@ export default function Home() {
           letterSpacing: '0.5px',
         }}
       >
-        PORTAL CE · GESTIÓN PRIVADA DE INFORMACIÓN
+        PORTAL CE · GESTIÓN DE INFORMACIÓN
         <br />
-        SISTEMA PRIVADO DE CONSULTAS · ACCESO SUJETO A AUTORIZACIÓN
+        SISTEMA DE CONSULTAS · ACCESO AUTORIZACIÓN
       </footer>
     </>
   );
