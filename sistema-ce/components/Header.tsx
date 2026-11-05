@@ -36,18 +36,9 @@ export default function Header() {
           }}
         />
 
-        <span>
-          <strong style={{ display: 'block', fontSize: '21px' }}>
-            PORTAL CE
-          </strong>
-          <small style={{ fontSize: '9px', letterSpacing: '1.5px' }}>
-            GESTIÓN PRIVADA DE REGISTROS
-          </small>
-        </span>
-      </a>
 
       <span style={{ fontSize: '12px', fontWeight: 600 }}>
-        CONSULTA PRIVADA
+        Visor Digital
       </span>
     </header>
   );
