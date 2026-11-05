@@ -61,22 +61,6 @@ export default function Home() {
           </div>
         </section>
 
-        <div
-          style={{
-            textAlign: 'center',
-            marginTop: 18,
-            fontSize: 12,
-            color: 'var(--muted)',
-          }}
-        >
-          ¿Administras los registros?{' '}
-          <a
-            href="/admin"
-            style={{ color: 'var(--blue)', fontWeight: 700 }}
-          >
-            Acceso administrativo
-          </a>
-        </div>
       </main>
 
       <footer
