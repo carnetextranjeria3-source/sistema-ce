@@ -140,7 +140,7 @@ function Content() {
                 {field('VENCIMIENTO DE RESIDENCIA', fmt(record.residenceExpiry), 'ce-centered')}
               </div>
 
-              <div className="ce-notice">
+              <div className="ce-notice" style={{ backgroundColor: '#e3f4e7', color: '#245c35' }}>
                 Esta ficha contiene información registrada en los sistemas institucionales. 
                 Los datos personales y biométricos se encuentran protegidos conforme a la normativa vigente. 
                 Su acceso está sujeto a los controles de seguridad y autorización correspondientes.
