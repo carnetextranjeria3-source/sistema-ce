@@ -210,12 +210,13 @@ function Content() {
 .ce-sheet::before {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: -25%;
   background-image: url('/images/portal-ce-logo.png');
-  background-repeat: no-repeat;
+  background-repeat: repeat;
+  background-size: 175px auto;
   background-position: center;
-  background-size: min(65%, 430px);
-  opacity: .07;
+  opacity: .13;
+  transform: rotate(-25deg);
   pointer-events: none;
   z-index: 0;
 }
