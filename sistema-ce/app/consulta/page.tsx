@@ -208,18 +208,14 @@ function Content() {
 }
 
 .ce-sheet::before {
-  content: "MIGRACIONES";
+  content: "";
   position: absolute;
-  top: 48%;
-  left: -12%;
-  width: 125%;
-  text-align: center;
-  transform: rotate(-28deg);
-  color: #174a78;
+  inset: 0;
+  background-image: url('/images/portal-ce-logo.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: min(65%, 430px);
   opacity: .07;
-  font-size: 30px;
-  font-weight: 800;
-  letter-spacing: 5px;
   pointer-events: none;
   z-index: 0;
 }
@@ -259,6 +255,7 @@ function Content() {
         }
 
         .ce-image {
+  position: relative;
   height: 125px;
   display: flex;
   justify-content: center;
@@ -270,6 +267,25 @@ function Content() {
   color: #66778b;
   font-size: 10px;
   text-align: center;
+}
+
+.ce-image::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url('/images/portal-ce-marca-agua.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100px auto;
+  opacity: .12;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ce-image img,
+.ce-image span {
+  position: relative;
+  z-index: 1;
 }
 
 .ce-image img {
